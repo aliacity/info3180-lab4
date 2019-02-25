@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block main %}
+  <h1 class="page-header">Images Uploaded</h1>
+  
+  <div class="main">
+    {% for filenames in filenames %}
+    <div class="row">
+        <img class="column" src=" {{ url_for('static', filename= 'uploads/' + filenames) }}" >
+    </div>
+    {% endfor %}
+  </div>
+   
+{% endblock %} 
