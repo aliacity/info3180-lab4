@@ -47,14 +47,23 @@ def upload():
 
     return render_template('upload.html',uploadedform=uploadedform)
     
-def getimages():
+def get_uploaded_images():
     filearray = []
     for cwd, subdirs, files in os.walk(app.config['UPLOAD_FOLDER']):
         for x in files:
             if x.split('.')[-1] in ALLOWED_EXTENSIONS:
                 filearray.append(x)
     return filearray            
-
+    
+    
+@app.route('/files')
+def files():
+    """Shows all image files uploaded to the website"""
+    if not session.get('logged_in'):
+        abort(401)
+        
+    filenames = get_uploaded_images()
+    return render_template('files.html', filenames = filenames)
 
 @app.route('/login', methods=['POST', 'GET'])
 def login():
@@ -75,16 +84,7 @@ def logout():
     session.pop('logged_in', None)
     flash('You were logged out', 'success')
     return redirect(url_for('home'))
-# ####
-# #@app.route('/files')
-# def files():
-#     """Render website's files page."""
-#     if not session.get('logged_in'):
-#         abort(401)
-        
-#     fileNames = get_uploaded_images()
-#     return render_template('files.html', fileNames = fileNames)
-# ####
+
 
 ###
 # The functions below should be applicable to all Flask apps.
